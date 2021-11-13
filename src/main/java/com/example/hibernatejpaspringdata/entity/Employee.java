@@ -29,11 +29,10 @@ public class Employee {
     @ManyToMany(mappedBy = "employees")
     private Set<Project> projects = new HashSet<>();
 
-    @OneToOne(cascade = CascadeType.ALL,
-            orphanRemoval = true)
+    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true, fetch = FetchType.LAZY)
     private Address address;
 
-    @ManyToOne()
+    @ManyToOne(fetch = FetchType.LAZY)
     private Department department;
 
     //<editor-fold desc="getter and setter">

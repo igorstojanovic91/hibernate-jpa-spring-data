@@ -1,19 +1,18 @@
 package com.example.hibernatejpaspringdata.repository;
 
 import com.example.hibernatejpaspringdata.entity.*;
-import org.checkerframework.checker.units.qual.A;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
-import org.testcontainers.shaded.org.apache.commons.lang.ArrayUtils;
 
 import javax.persistence.EntityManager;
-import java.util.*;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.junit.jupiter.api.Assertions.assertTrue;
 
 @DataJpaTest
 @AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
@@ -21,17 +20,15 @@ public class RelationshipTest {
 
     @Autowired
     private EmployeeRepository employeeRepository;
-    @Autowired
-    private AddressRepository addressRepository;
+
     @Autowired
     private DepartmentRepository departmentRepository;
-    @Autowired
-    private PhoneRepository phoneRepository;
+
     @Autowired
     private ProjectRepository projectRepository;
+
     @Autowired
     private EntityManager em;
-
 
 
     @BeforeEach
@@ -46,7 +43,6 @@ public class RelationshipTest {
         nicolesAddress.setState("BE");
         nicolesAddress.setZip("3014");
         nicolesAddress.setCity("Bern");
-        addressRepository.saveAndFlush(nicolesAddress);
 
         Project p1 = new Project();
         p1.setName("Ferien");
@@ -67,7 +63,6 @@ public class RelationshipTest {
         phone.setPhonenumber("0792613050");
         phone.setType(PhoneType.MOBILE);
         phone.setEmployee(nicole);
-        phoneRepository.saveAndFlush(phone);
 
 
         Department department = new Department();
@@ -86,7 +81,8 @@ public class RelationshipTest {
         nicole.setProjects(projectList);
 
         employeeRepository.saveAndFlush(nicole);
-        em.clear();;
+
+
     }
 
     @Test
@@ -94,15 +90,50 @@ public class RelationshipTest {
         List<Employee> all = employeeRepository.findAll();
 
         assertEquals(1, all.size());
+
     }
 
     @Test
-    void findNicole_successful() {
-        Optional<Employee> byId = employeeRepository.findById(1000);
+    void findNicole_shouldWork() {
+        List<Employee> employees = employeeRepository.findAll();
+        Employee nicole = employees.get(0);
 
-        assertTrue(byId.isPresent());
 
-        assertEquals("Nicole Stojanovic", byId.get().getName());
+        assertEquals("Nicole Stojanovic", nicole.getName());
+    }
+
+
+    @Test
+    void cascadePhone_shouldWork() {
+        List<Employee> employees = employeeRepository.findAll();
+        Employee nicole = employees.get(0);
+
+
+        assertEquals("0792613050", nicole.getPhones().get(0).getPhonenumber());
+
+    }
+
+    @Test
+    void cascadeAddress_shouldWork() {
+        List<Employee> employees = employeeRepository.findAll();
+        Employee nicole = employees.get(0);
+
+        assertEquals("Bern", nicole.getAddress().getCity());
+    }
+
+    @Test
+    void orphanRemoval_shouldWork() {
+        List<Employee> employees = employeeRepository.findAll();
+        Employee nicole = employees.get(0);
+        Phone phone = nicole.getPhones().get(0);
+        nicole.getPhones().remove(phone);
+
+        employeeRepository.saveAndFlush(nicole);
+
+        em.refresh(nicole);
+
+        assertEquals(0, nicole.getPhones().size());
+
     }
 
 
