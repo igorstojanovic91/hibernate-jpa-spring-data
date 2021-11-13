@@ -45,10 +45,12 @@ class EmployeeRepositoryTest {
 
         employeeRepository.saveAndFlush(igor);
 
-        Optional<Employee> employee = employeeRepository.findById(1);
+        List<Employee> employees = employeeRepository.findAll();
 
-        assertEquals("Igor Stojanovic", employee.get().getName());
+        assertEquals(1,employees.size());
     }
+
+
 
 
     private Employee getEmployee() {
