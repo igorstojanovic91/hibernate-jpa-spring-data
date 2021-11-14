@@ -20,42 +20,17 @@ class EmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @BeforeEach
-    void clearDB() {
-        employeeRepository.deleteAll();
-    }
 
     @Test
-    void createAndSaveEmployee_Success() {
-        Employee igor = getEmployee();
-
-        employeeRepository.saveAndFlush(igor);
-
+    void FindEmployees() {
         List<Employee> employees = employeeRepository.findAll();
 
-        assertEquals(1, employees.size());
-    }
-
-    @Test
-    void createAndSaveEmployee_FindIt() {
-        Employee igor = getEmployee();
-
-        employeeRepository.saveAndFlush(igor);
-
-        List<Employee> employees = employeeRepository.findAll();
-
-        assertEquals(1,employees.size());
+        assertEquals(6,employees.size());
     }
 
 
 
 
-    private Employee getEmployee() {
-        Employee igor = new Employee();
-        igor.setId(1);
-        igor.setName("Igor Stojanovic");
-        igor.setSalary(120000L);
-        return igor;
-    }
+
 
 }
