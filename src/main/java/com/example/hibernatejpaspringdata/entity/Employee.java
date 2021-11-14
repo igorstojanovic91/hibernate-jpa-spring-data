@@ -6,8 +6,20 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+
+@NamedQuery(name = Employee.LOWEST_SALARY,
+        query = """
+                            SELECT e FROM Employee e WHERE e.salary = (SELECT MIN(e.salary) FROM Employee e)
+
+                """)
+@NamedQuery(name = Employee.WITHOUT_BUSINESS_PHONE,
+query = "SELECT e from Employee e  WHERE e NOT IN ( SELECT DISTINCT e FROM Employee e join e.phones p WHERE p.type = :type)")
 @Entity
 public class Employee {
+
+    public static final String LOWEST_SALARY = "Employee.lowestSalary";
+    public static final String WITHOUT_BUSINESS_PHONE = "Employee.withoutBusinessPhone";
+
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "employee_seq")
     @SequenceGenerator(name = "employee_seq", sequenceName = "employee_seq", initialValue = 1000, allocationSize = 50)
