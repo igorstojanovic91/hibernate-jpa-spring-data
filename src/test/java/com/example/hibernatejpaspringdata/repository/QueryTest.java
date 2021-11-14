@@ -2,6 +2,7 @@ package com.example.hibernatejpaspringdata.repository;
 
 import com.example.hibernatejpaspringdata.dto.DepartmentSalaryDTO;
 import com.example.hibernatejpaspringdata.dto.EmployeeNameWithAddress;
+import com.example.hibernatejpaspringdata.dto.EmployeeWithPhones;
 import com.example.hibernatejpaspringdata.entity.*;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,6 +151,24 @@ public class QueryTest {
 
         assertTrue(list.get(0) instanceof DesignProject);
     }
+
+    @Test
+    void dynamicProjectionNestedInterfaces() {
+        List<EmployeeWithPhones> list = employeeRepository.findAllByAddressState("ZH", EmployeeWithPhones.class);
+
+        assertEquals(3, list.size());
+
+        list.forEach(employeeWithPhones -> System.out.println(employeeWithPhones.getName()));
+    }
+
+    @Test
+    void dynamicProjectionEntities() {
+        List<Employee> list = employeeRepository.findAllByAddressState("ZH", Employee.class);
+
+        assertEquals(3, list.size());
+    }
+
+
 
 
 
