@@ -24,6 +24,7 @@ public class Employee {
     @OneToMany(mappedBy = "employee",
             cascade = CascadeType.ALL,
             orphanRemoval = true)
+    @OrderBy("type")
     private List<Phone> phones = new ArrayList<>();
 
     @ManyToMany(mappedBy = "employees")
@@ -110,6 +111,14 @@ public class Employee {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    public Department getDepartment() {
+        return department;
+    }
+
+    public void setDepartment(Department department) {
+        this.department = department;
     }
 
     //</editor-fold>

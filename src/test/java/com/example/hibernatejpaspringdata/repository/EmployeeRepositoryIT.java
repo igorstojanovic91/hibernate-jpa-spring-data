@@ -27,7 +27,7 @@ public class EmployeeRepositoryIT {
 
         List<Employee> employeeList = employeeRepository.findAll();
 
-        assertEquals(1, employeeList.size());
+        assertEquals(7, employeeList.size());
 
     }
 }

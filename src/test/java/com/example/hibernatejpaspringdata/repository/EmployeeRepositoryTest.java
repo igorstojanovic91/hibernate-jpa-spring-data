@@ -20,9 +20,6 @@ class EmployeeRepositoryTest {
     @Autowired
     private EmployeeRepository employeeRepository;
 
-    @Autowired
-    private EntityManager em;
-
     @BeforeEach
     void clearDB() {
         employeeRepository.deleteAll();
