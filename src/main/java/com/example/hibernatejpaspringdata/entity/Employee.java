@@ -15,7 +15,7 @@ import java.util.Set;
 @NamedQuery(name = Employee.WITHOUT_BUSINESS_PHONE,
 query = "SELECT e from Employee e  WHERE e NOT IN ( SELECT DISTINCT e FROM Employee e join e.phones p WHERE p.type = :type)")
 @Entity
-public class Employee {
+public class Employee extends AuditableEntity {
 
     public static final String LOWEST_SALARY = "Employee.lowestSalary";
     public static final String WITHOUT_BUSINESS_PHONE = "Employee.withoutBusinessPhone";

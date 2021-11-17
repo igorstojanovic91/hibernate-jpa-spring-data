@@ -3,7 +3,7 @@ package com.example.hibernatejpaspringdata.entity;
 import javax.persistence.*;
 
 @Entity
-public class Address {
+public class Address extends AuditableEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "address_seq")
